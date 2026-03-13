@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="warm" data-font="playfair">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Ayat's Book">
+  <meta name="theme-color" content="#c47040">
+  <meta name="description" content="Ayat's Memory Book — capturing every precious moment">
+  <title>Ayat's Memory Book</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ══════════════════════════════
+       LOGIN SCREEN
+  ══════════════════════════════ -->
+  <div id="login-screen" class="screen active">
+    <div class="login-orb" style="width:300px;height:300px;background:rgba(255,200,160,0.18);top:-80px;left:-80px"></div>
+    <div class="login-orb" style="width:250px;height:250px;background:rgba(180,220,255,0.12);bottom:40px;right:-60px"></div>
+    <div class="login-orb" style="width:180px;height:180px;background:rgba(255,180,200,0.10);bottom:120px;left:20px"></div>
+    <div class="login-card">
+      <span class="login-flower">🌸</span>
+      <div class="login-title">Ayat's<br>Memory Book</div>
+      <div class="login-sub">Sign in to capture every beautiful moment</div>
+      <button class="google-btn" id="login-btn">
+        <svg viewBox="0 0 48 48">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        Continue with Google
+      </button>
+      <p style="margin-top:20px;font-size:12px;color:var(--text3);font-style:italic;line-height:1.6">
+        Your memories are stored securely in your own Google Drive.<br>
+        Only you and people you invite can see them.
+      </p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       LOADING SCREEN
+  ══════════════════════════════ -->
+  <div id="loading-screen" class="screen">
+    <div class="loading" style="flex:1">
+      <span style="font-size:48px;animation:float 2s ease-in-out infinite">🌸</span>
+      <div class="spinner"></div>
+      <div class="loading-text">Loading your memories…</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       MAIN APP SCREEN
+  ══════════════════════════════ -->
+  <div id="main-screen" class="screen">
+
+    <!-- Top Nav -->
+    <nav class="top-nav">
+      <div class="nav-logo" id="nav-title">Ayat's Memory Book</div>
+      <button class="icon-btn" id="settings-btn" title="Settings">⚙️</button>
+      <div class="nav-avatar" id="nav-avatar">U</div>
+    </nav>
+
+    <!-- Child Tabs -->
+    <div class="child-tabs" id="child-tabs"></div>
+
+    <!-- Child Cover Banner -->
+    <div class="child-banner" id="child-banner">
+      <img id="child-banner-img" src="" alt="" style="display:none">
+      <div class="child-banner-overlay">
+        <div class="child-banner-name" id="child-banner-name"></div>
+      </div>
+      <button class="child-banner-edit" id="child-banner-edit" title="Edit child">✏️</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat-pill"><div class="stat-num" id="stat-memories">0</div><div class="stat-label">Memories</div></div>
+      <div class="stat-pill"><div class="stat-num" id="stat-media">0</div><div class="stat-label">With Media</div></div>
+      <div class="stat-pill"><div class="stat-num" id="stat-milestones">0</div><div class="stat-label">Milestones</div></div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-wrap">
+      <input class="search-input" id="search-input" type="search" placeholder="Search memories…">
+    </div>
+
+    <!-- Filter Pills -->
+    <div class="filter-bar">
+      <div class="filter-pill active" data-tag="all" onclick="UI.setFilter('all')">All</div>
+      <div class="filter-pill" data-tag="milestone" onclick="UI.setFilter('milestone')">🏆 Milestone</div>
+      <div class="filter-pill" data-tag="everyday" onclick="UI.setFilter('everyday')">☀️ Everyday</div>
+      <div class="filter-pill" data-tag="funny" onclick="UI.setFilter('funny')">😄 Funny</div>
+      <div class="filter-pill" data-tag="love" onclick="UI.setFilter('love')">💕 Love</div>
+      <div class="filter-pill" data-tag="growth" onclick="UI.setFilter('growth')">🌱 Growth</div>
+    </div>
+
+    <!-- Memory Grid -->
+    <div class="memory-grid" id="memory-grid"></div>
+
+    <!-- FAB -->
+    <button class="fab" id="fab" title="Add memory">+</button>
+  </div>
+
+  <!-- ══════════════════════════════
+       MEMORY DETAIL OVERLAY
+  ══════════════════════════════ -->
+  <div id="detail-overlay" class="overlay">
+    <div class="sheet" style="border-radius:28px 28px 0 0;padding-bottom:0">
+      <span class="sheet-handle"></span>
+      <div id="detail-hero-wrap" style="overflow:hidden;border-radius:0;max-height:55vw;display:flex;align-items:center;justify-content:center;background:var(--bg2)"></div>
+      <div id="detail-media-scroll" class="detail-media-scroll"></div>
+      <div class="detail-info">
+        <div id="detail-tag" class="detail-tag"></div>
+        <div class="detail-title" id="detail-title"></div>
+        <div class="detail-meta">
+          <div class="detail-date" id="detail-date"></div>
+          <div class="detail-age" id="detail-age"></div>
+        </div>
+        <div class="detail-note" id="detail-note"></div>
+        <div class="detail-actions" id="detail-actions"></div>
+        <div style="height:env(safe-area-inset-bottom,20px)"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       ADD/EDIT MEMORY OVERLAY
+  ══════════════════════════════ -->
+  <div id="memory-overlay" class="overlay">
+    <div class="sheet">
+      <span class="sheet-handle"></span>
+      <div class="sheet-header">
+        <div class="sheet-title" id="memory-sheet-title">New Memory ✨</div>
+        <button class="sheet-close">×</button>
+      </div>
+      <div class="sheet-body">
+
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input class="form-input" id="mem-title" type="text" placeholder="What happened today?">
+        </div>
+
+        <div style="display:flex;gap:12px">
+          <div class="form-group" style="flex:1">
+            <label class="form-label">Date</label>
+            <input class="form-input" id="mem-date" type="date">
+          </div>
+          <div class="form-group" style="flex:1">
+            <label class="form-label">Baby's Age</label>
+            <input class="form-input" id="mem-age" type="text" placeholder="e.g. 3 months">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Tag</label>
+          <div class="tag-row">
+            <button class="tag-btn sel" data-tag="milestone" onclick="document.querySelectorAll('.tag-btn').forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">🏆 Milestone</button>
+            <button class="tag-btn" data-tag="everyday" onclick="document.querySelectorAll('.tag-btn').forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">☀️ Everyday</button>
+            <button class="tag-btn" data-tag="funny" onclick="document.querySelectorAll('.tag-btn').forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">😄 Funny</button>
+            <button class="tag-btn" data-tag="love" onclick="document.querySelectorAll('.tag-btn').forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">💕 Love</button>
+            <button class="tag-btn" data-tag="growth" onclick="document.querySelectorAll('.tag-btn').forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">🌱 Growth</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Card Color</label>
+          <div class="color-row">
+            <div class="color-dot sel" data-color="#fde8d8" style="background:#fde8d8" onclick="document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('sel'));this.classList.add('sel')"></div>
+            <div class="color-dot" data-color="#dceeff" style="background:#dceeff" onclick="document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('sel'));this.classList.add('sel')"></div>
+            <div class="color-dot" data-color="#e8f5e9" style="background:#e8f5e9" onclick="document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('sel'));this.classList.add('sel')"></div>
+            <div class="color-dot" data-color="#f5e8ff" style="background:#f5e8ff" onclick="document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('sel'));this.classList.add('sel')"></div>
+            <div class="color-dot" data-color="#fff0e0" style="background:#fff0e0" onclick="document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('sel'));this.classList.add('sel')"></div>
+            <div class="color-dot" data-color="#fff9f5" style="background:#fff9f5;border:1px solid #eee" onclick="document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('sel'));this.classList.add('sel')"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Your Note</label>
+          <textarea class="form-input" id="mem-note" rows="4" placeholder="Write about this moment — how it felt, what you want her to know…"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Photos, Videos & Files</label>
+          <div class="upload-zone" onclick="document.getElementById('file-input').click()"
+            ondragover="event.preventDefault();this.classList.add('drag')"
+            ondragleave="this.classList.remove('drag')"
+            ondrop="event.preventDefault();this.classList.remove('drag');UI.handleFileSelect({files:event.dataTransfer.files})">
+            <div class="upload-icon">📷</div>
+            <div class="upload-text">Tap to add photos, videos or files</div>
+            <div class="upload-hint">JPG · PNG · MP4 · MOV · MP3 · PDF</div>
+          </div>
+          <input id="file-input" type="file" multiple accept="image/*,video/*,audio/*,.pdf,.doc,.docx" style="display:none"
+            onchange="UI.handleFileSelect(this)">
+          <div id="thumb-grid" class="thumb-grid"></div>
+          <div id="upload-progress" class="progress-bar-wrap" style="display:none">
+            <div id="upload-bar" class="progress-bar" style="width:0%"></div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button id="delete-memory-btn" class="btn btn-danger" style="display:none" onclick="UI.confirmDeleteMemory(UI.editingMemory)">Delete</button>
+          <button class="btn btn-ghost" onclick="UI.closeOverlay('memory-overlay')">Cancel</button>
+          <button id="save-memory-btn" class="btn btn-primary" onclick="UI.saveMemory()">Save Memory ✨</button>
+        </div>
+        <div style="height:env(safe-area-inset-bottom,20px)"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SHARE OVERLAY
+  ══════════════════════════════ -->
+  <div id="share-overlay" class="overlay">
+    <div class="sheet">
+      <span class="sheet-handle"></span>
+      <div class="sheet-header">
+        <div class="sheet-title" id="share-sheet-title">Share Memory</div>
+        <button class="sheet-close">×</button>
+      </div>
+      <div class="sheet-body">
+        <div id="share-options" class="share-options"></div>
+        <div style="height:env(safe-area-inset-bottom,20px)"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       ADD/EDIT CHILD OVERLAY
+  ══════════════════════════════ -->
+  <div id="child-overlay" class="overlay">
+    <div class="sheet">
+      <span class="sheet-handle"></span>
+      <div class="sheet-header">
+        <div class="sheet-title" id="child-sheet-title">Add Child</div>
+        <button class="sheet-close">×</button>
+      </div>
+      <div class="sheet-body">
+        <div class="form-group">
+          <label class="form-label">Name</label>
+          <input class="form-input" id="child-name-input" type="text" placeholder="Child's name">
+        </div>
+        <div style="display:flex;gap:12px">
+          <div class="form-group" style="flex:1">
+            <label class="form-label">Emoji</label>
+            <input class="form-input" id="child-emoji-input" type="text" placeholder="👶" maxlength="4">
+          </div>
+          <div class="form-group" style="flex:1">
+            <label class="form-label">Theme Color</label>
+            <input class="form-input" id="child-color-input" type="color" value="#fde8d8" style="padding:6px;height:46px;cursor:pointer">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cover Photo</label>
+          <div class="upload-zone" onclick="document.getElementById('child-cover-input').click()">
+            <div class="upload-icon">🖼️</div>
+            <div class="upload-text">Tap to choose a cover photo</div>
+          </div>
+          <input id="child-cover-input" type="file" accept="image/*" style="display:none"
+            onchange="UI.handleChildCoverSelect(this)">
+          <div id="child-cover-preview"></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" onclick="UI.closeOverlay('child-overlay')">Cancel</button>
+          <button id="save-child-btn" class="btn btn-primary" onclick="UI.saveChild()">Save</button>
+        </div>
+        <div style="height:env(safe-area-inset-bottom,20px)"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SETTINGS OVERLAY
+  ══════════════════════════════ -->
+  <div id="settings-overlay" class="overlay">
+    <div class="sheet">
+      <span class="sheet-handle"></span>
+      <div class="sheet-header">
+        <div class="sheet-title">Settings</div>
+        <button class="sheet-close">×</button>
+      </div>
+      <div class="sheet-body">
+
+        <!-- Profile -->
+        <div class="settings-section">
+          <div style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--surface);border-radius:18px;border:1.5px solid var(--border)">
+            <div class="nav-avatar" id="settings-avatar" style="width:48px;height:48px;font-size:18px;flex-shrink:0"></div>
+            <div style="flex:1;min-width:0">
+              <div style="font-family:var(--font-display);font-size:16px;font-weight:600;color:var(--text)" id="settings-user-name"></div>
+              <div style="font-size:12px;color:var(--text3)" id="settings-user-email"></div>
+            </div>
+            <button class="btn btn-ghost" id="signout-btn" style="padding:8px 14px;font-size:12px">Sign Out</button>
+          </div>
+        </div>
+
+        <!-- Theme -->
+        <div class="settings-section">
+          <div class="settings-heading">🎨 Theme</div>
+          <div class="theme-grid">
+            <div class="theme-card active" data-theme="warm" onclick="UI.changeTheme('warm')">
+              <div class="theme-swatch" style="background:linear-gradient(135deg,#fde8d8,#c47040)"></div>
+              <div class="theme-name">Warm</div>
+            </div>
+            <div class="theme-card" data-theme="rose" onclick="UI.changeTheme('rose')">
+              <div class="theme-swatch" style="background:linear-gradient(135deg,#fad8e4,#b04070)"></div>
+              <div class="theme-name">Rose</div>
+            </div>
+            <div class="theme-card" data-theme="sage" onclick="UI.changeTheme('sage')">
+              <div class="theme-swatch" style="background:linear-gradient(135deg,#daeada,#4a7c59)"></div>
+              <div class="theme-name">Sage</div>
+            </div>
+            <div class="theme-card" data-theme="navy" onclick="UI.changeTheme('navy')">
+              <div class="theme-swatch" style="background:linear-gradient(135deg,#d8e4f5,#2c4a8c)"></div>
+              <div class="theme-name">Navy</div>
+            </div>
+            <div class="theme-card" data-theme="onyx" onclick="UI.changeTheme('onyx')">
+              <div class="theme-swatch" style="background:linear-gradient(135deg,#241e1a,#e8a050)"></div>
+              <div class="theme-name">Onyx</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Font -->
+        <div class="settings-section">
+          <div class="settings-heading">✍️ Font</div>
+          <div class="font-card active" data-font="playfair" onclick="UI.changeFont('playfair')">
+            <div>
+              <div class="font-preview" style="font-family:'Playfair Display',serif">Playfair Display</div>
+              <div class="font-label">Classic & Elegant</div>
+            </div>
+            <span class="check">✓</span>
+          </div>
+          <div class="font-card" data-font="cormorant" onclick="UI.changeFont('cormorant')">
+            <div>
+              <div class="font-preview" style="font-family:'Cormorant Garamond',serif">Cormorant Garamond</div>
+              <div class="font-label">Refined & Literary</div>
+            </div>
+            <span class="check" style="opacity:0">✓</span>
+          </div>
+          <div class="font-card" data-font="dm-serif" onclick="UI.changeFont('dm-serif')">
+            <div>
+              <div class="font-preview" style="font-family:'DM Serif Display',serif">DM Serif Display</div>
+              <div class="font-label">Modern & Editorial</div>
+            </div>
+            <span class="check" style="opacity:0">✓</span>
+          </div>
+        </div>
+
+        <!-- Invite Viewers -->
+        <div class="settings-section">
+          <div class="settings-heading">👥 Share with Family</div>
+          <p style="font-size:13px;color:var(--text3);margin-bottom:14px;line-height:1.6">Invite family members to view memories. They can see everything but only you can add or delete.</p>
+          <div id="invite-list"></div>
+          <div style="display:flex;gap:10px;margin-top:14px">
+            <input class="form-input" id="invite-email" type="email" placeholder="family@email.com" style="flex:1;padding:10px 14px">
+            <button id="invite-btn" class="btn btn-primary" onclick="UI.sendInvite()" style="padding:10px 18px;white-space:nowrap">Send Invite</button>
+          </div>
+        </div>
+
+        <!-- About -->
+        <div class="settings-section" style="text-align:center;padding-bottom:20px">
+          <div style="font-size:28px;margin-bottom:8px">🌸</div>
+          <div style="font-family:var(--font-display);font-size:14px;color:var(--text2)">Ayat's Memory Book</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:4px">All memories stored in your Google Drive</div>
+        </div>
+
+        <div style="height:env(safe-area-inset-bottom,20px)"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       CONFIRM DIALOG
+  ══════════════════════════════ -->
+  <div id="confirm-overlay" class="confirm-overlay">
+    <div class="confirm-box">
+      <div class="confirm-title" id="confirm-title">Are you sure?</div>
+      <div class="confirm-msg" id="confirm-msg"></div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" id="confirm-cancel">Cancel</button>
+        <button class="btn btn-danger" id="confirm-ok">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       MEDIA FULLSCREEN VIEWER
+  ══════════════════════════════ -->
+  <div id="media-viewer" class="media-viewer">
+    <div id="media-viewer-inner"></div>
+    <button class="media-viewer-close" id="media-viewer-close">×</button>
+  </div>
+
+</div><!-- /#app -->
+
+<script src="js/auth.js"></script>
+<script src="js/drive.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
