@@ -1,6 +1,6 @@
 // ── Google Auth ──
 // Replace CLIENT_ID with your actual Google OAuth client ID
-const CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+const CLIENT_ID = '735409643887-ma2oavkdv2frdtv8tc51qnmlu9ajdbn5.apps.googleusercontent.com';
 const SCOPES = [
   'https://www.googleapis.com/auth/drive.file',
   'https://www.googleapis.com/auth/drive.appdata',
